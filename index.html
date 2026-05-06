@@ -3,6 +3,29 @@
 <head>
   <meta charset="utf-8">
   <title>Bloggin' GSoC!</title>
+  <style>
+    body {
+      max-width: 50vw; 
+      min-width: 320px; 
+      padding: 20px 40px;
+      font-family: Georgia, serif; 
+      line-height: 1.6;
+    }
+    pre {
+      font-family: inherit; 
+      white-space: pre-wrap; 
+      word-wrap: break-word;
+    }
+    a { color: #0366d6; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    
+    .original-link {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px dashed #ccc;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 <body>
   <div id="app">Loading...</div>
@@ -24,7 +47,7 @@
       let html = '<ul>';
       issues.forEach(issue => {
         if (!issue.pull_request) {
-          html += `<li><a href="#${issue.number}" onclick="renderPost(${issue.number})">${issue.title}</a></li>`;
+          html += `<li style="margin-bottom: 10px;"><a href="#${issue.number}" onclick="renderPost(${issue.number})">${issue.title}</a></li>`;
         }
       });
       html += '</ul>';
@@ -36,9 +59,12 @@
       const issue = await fetchAPI(`https://api.github.com/repos/${owner}/${repo}/issues/${number}`);
       
       app.innerHTML = `
-        <a href="#" onclick="renderList()">[List]</a>
+        <a href="#" onclick="renderList()">← Back to List</a>
         <h1>${issue.title}</h1>
-        <pre style="white-space: pre-wrap; word-wrap: break-word;">${issue.body}</pre>
+        <pre>${issue.body}</pre>
+        <div class="original-link">
+          <a href="${issue.html_url}" target="_blank">View original issue on GitHub</a>
+        </div>
       `;
     }
 
