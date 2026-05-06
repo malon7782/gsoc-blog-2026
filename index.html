@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Bloggin' GSoC!</title>
+</head>
+<body>
+  <div id="app">Loading...</div>
+
+  <script>
+    const owner = 'malon7782';
+    const repo = 'gsoc-blog-2026';
+    const app = document.getElementById('app');
+
+    async function fetchAPI(url) {
+      const res = await fetch(url);
+      return await res.json();
+    }
+
+    async function renderList() {
+      app.innerHTML = 'Loading...';
+      const issues = await fetchAPI(`https://api.github.com/repos/${owner}/${repo}/issues?state=open`);
+      
+      let html = '<ul>';
+      issues.forEach(issue => {
+        if (!issue.pull_request) {
+          html += `<li><a href="#${issue.number}" onclick="renderPost(${issue.number})">${issue.title}</a></li>`;
+        }
+      });
+      html += '</ul>';
+      app.innerHTML = html;
+    }
+
+    async function renderPost(number) {
+      app.innerHTML = 'Loading...';
+      const issue = await fetchAPI(`https://api.github.com/repos/${owner}/${repo}/issues/${number}`);
+      
+      app.innerHTML = `
+        <a href="#" onclick="renderList()">[List]</a>
+        <h1>${issue.title}</h1>
+        <pre style="white-space: pre-wrap; word-wrap: break-word;">${issue.body}</pre>
+      `;
+    }
+
+    function router() {
+      const hash = window.location.hash.substring(1);
+      if (hash) {
+        renderPost(hash);
+      } else {
+        renderList();
+      }
+    }
+
+    window.addEventListener('hashchange', router);
+    router();
+  </script>
+</body>
+</html>
