@@ -71,13 +71,13 @@
       const markdownContent = marked.parse(issue.body || '');
       
       app.innerHTML = `
-        <a href="#" onclick="renderList()">← Back to List</a>
+        <a href="#" onclick="renderList()">← Back to Table of Contents</a>
         <h1>${issue.title}</h1>
         <div class="markdown-body">
           ${markdownContent}
         </div>
         <div class="original-link">
-          <a href="${issue.html_url}" target="_blank">View original issue on GitHub</a>
+          <a href="${issue.html_url}" target="_blank">View original post on GitHub</a>
         </div>
       `;
 
